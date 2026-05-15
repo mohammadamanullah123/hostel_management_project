@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}Attendance — HostelPro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2>
+            <i class="bi bi-clipboard-check-fill me-2" style="color:#34d399;"></i>
+            {% if is_admin %}All Attendance{% else %}My Attendance{% endif %}
+        </h2>
+        {% if is_admin %}
+        <a href="{% url 'mark_attendance' %}" class="btn btn-primary" id="mark-attendance-btn">
+            <i class="bi bi-clipboard-check-fill me-1"></i> Mark Attendance
+        </a>
+        {% endif %}
+    </div>
+
+    {% if not is_admin %}
+    <!-- Student Attendance Summary -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-6">
+            <div class="stat-card stat-green">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stat-label">Total Present</div>
+                        <div class="stat-value">{{ total_present|default:"0" }}</div>
+                    </div>
+                    <div class="stat-icon"><i class="bi bi-check2-all"></i></div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="stat-card stat-red">
+                <div class="d-flex align-items-center justify-content-between">
+                    <div>
+                        <div class="stat-label">Total Absent</div>
+                        <div class="stat-value">{{ total_absent|default:"0" }}</div>
+                    </div>
+                    <div class="stat-icon"><i class="bi bi-x-lg"></i></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Attendance Table -->
+    <div class="glass-card" style="padding:0;overflow:hidden;">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        {% if is_admin %}<th>Student</th>{% endif %}
+                        <th>Date</th>
+                        <th>Status</th>
+                        {% if is_admin %}<th>Room</th>{% endif %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance %}
+                    <tr>
+                        {% if is_admin %}
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                <span style="width:28px;height:28px;border-radius:50%;background:var(--gradient-accent);display:flex;align-items:center;justify-content:center;font-size:0.7rem;font-weight:700;color:#fff;">
+                                    {{ record.student.name|first|upper }}
+                                </span>
+                                {{ record.student.name }}
+                            </div>
+                        </td>
+                        {% endif %}
+                        <td class="text-muted">{{ record.date|date:"M d, Y" }}</td>
+                        <td>
+                            {% if record.status == 'present' %}
+                                <span class="badge bg-success">
+                                    <i class="bi bi-check-circle me-1"></i> Present
+                                </span>
+                            {% else %}
+                                <span class="badge bg-danger">
+                                    <i class="bi bi-x-circle me-1"></i> Absent
+                                </span>
+                            {% endif %}
+                        </td>
+                        {% if is_admin %}
+                        <td>
+                            {% if record.student.room %}
+                                <span class="badge bg-info">{{ record.student.room.room_no }}</span>
+                            {% else %}
+                                <span class="text-muted">—</span>
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="{% if is_admin %}4{% else %}2{% endif %}">
+                            <div class="empty-state">
+                                <div class="empty-icon"><i class="bi bi-clipboard"></i></div>
+                                <h5>No Attendance Records</h5>
+                                <p>{% if is_admin %}Start by marking today's attendance.{% else %}No attendance has been recorded yet.{% endif %}</p>
+                                {% if is_admin %}
+                                <a href="{% url 'mark_attendance' %}" class="btn btn-primary btn-sm mt-2">
+                                    <i class="bi bi-clipboard-check-fill me-1"></i> Mark Attendance
+                                </a>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

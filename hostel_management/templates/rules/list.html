@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% block title %}Hostel Rules — HostelPro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2>
+            <i class="bi bi-shield-check me-2" style="color:#fbbf24;"></i>
+            Hostel Rules
+        </h2>
+        {% if is_admin %}
+        <a href="{% url 'add_rule' %}" class="btn btn-primary" id="add-rule-btn">
+            <i class="bi bi-shield-plus me-1"></i> Add Rule
+        </a>
+        {% endif %}
+    </div>
+
+    <!-- Rules List -->
+    <div class="row g-3">
+        {% for rule in rules %}
+        <div class="col-12">
+            <div class="glass-card" style="animation-delay:{{ forloop.counter0 }}00ms;">
+                <div class="d-flex justify-content-between align-items-start gap-3">
+                    <div class="d-flex gap-3 flex-grow-1">
+                        <div style="width:36px;height:36px;border-radius:var(--radius-sm);background:rgba(245,158,11,0.12);color:#fbbf24;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.9rem;flex-shrink:0;">
+                            {{ forloop.counter }}
+                        </div>
+                        <div>
+                            <p class="mb-1" style="line-height:1.6;">{{ rule.rule_text }}</p>
+                            <span class="text-muted" style="font-size:0.75rem;">
+                                <i class="bi bi-clock me-1"></i> Added {{ rule.date_created|date:"M d, Y" }}
+                            </span>
+                        </div>
+                    </div>
+                    {% if is_admin %}
+                    <div class="d-flex gap-1 flex-shrink-0">
+                        <a href="{% url 'edit_rule' rule.rule_id %}" class="btn btn-sm btn-outline-primary" title="Edit">
+                            <i class="bi bi-pencil-fill"></i>
+                        </a>
+                        <a href="{% url 'delete_rule' rule.rule_id %}" class="btn btn-sm btn-outline-danger" title="Delete">
+                            <i class="bi bi-trash-fill"></i>
+                        </a>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="glass-card">
+                <div class="empty-state">
+                    <div class="empty-icon"><i class="bi bi-shield"></i></div>
+                    <h5>No Rules Found</h5>
+                    <p>{% if is_admin %}Start by adding your first hostel rule.{% else %}No hostel rules have been posted yet.{% endif %}</p>
+                    {% if is_admin %}
+                    <a href="{% url 'add_rule' %}" class="btn btn-primary btn-sm mt-2">
+                        <i class="bi bi-shield-plus me-1"></i> Add Rule
+                    </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+</div>
+{% endblock %}

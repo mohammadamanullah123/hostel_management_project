@@ -1,0 +1,117 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="HostelPro — Modern hostel management system for efficient student management, room allocation, and attendance tracking.">
+    <title>HostelPro — Hostel Management System</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+
+    <!-- ═══ Hero Section ═══ -->
+    <section class="hero-section">
+        <div class="hero-content">
+            <h1>
+                Welcome to<br>
+                <span class="text-gradient">HostelPro</span>
+            </h1>
+            <p class="hero-subtitle">
+                A comprehensive hostel management system that automates student management,
+                room allocation, attendance tracking, and hostel rules — all in one place.
+            </p>
+
+            <div class="hero-actions">
+                <a href="{% url 'login' %}" class="btn btn-primary btn-lg" id="hero-login-btn">
+                    <i class="bi bi-box-arrow-in-right me-2"></i> Login
+                </a>
+                <a href="{% url 'register' %}" class="btn btn-outline-light btn-lg" id="hero-register-btn">
+                    <i class="bi bi-person-plus me-2"></i> Register
+                </a>
+            </div>
+
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="value" id="stat-students">{{ total_students|default:"0" }}</div>
+                    <div class="label">Students</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="value" id="stat-rooms">{{ total_rooms|default:"0" }}</div>
+                    <div class="label">Rooms</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="value">24/7</div>
+                    <div class="label">Support</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Features Section ═══ -->
+    <section class="features-section">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold" style="font-size:2rem;">Why <span class="text-gradient">HostelPro</span>?</h2>
+                <p class="text-muted mt-2">Everything you need to manage your hostel efficiently</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-3 col-sm-6">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="bi bi-people-fill"></i>
+                        </div>
+                        <h5>Student Management</h5>
+                        <p>Add, update, and manage all student records with ease.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(6,182,212,0.12);color:#22d3ee;">
+                            <i class="bi bi-door-open-fill"></i>
+                        </div>
+                        <h5>Room Allocation</h5>
+                        <p>Manage rooms, track occupancy, and allocate efficiently.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(16,185,129,0.12);color:#34d399;">
+                            <i class="bi bi-clipboard-check-fill"></i>
+                        </div>
+                        <h5>Attendance Tracking</h5>
+                        <p>Mark and monitor daily attendance for all students.</p>
+                    </div>
+                </div>
+                <div class="col-md-3 col-sm-6">
+                    <div class="feature-card">
+                        <div class="feature-icon" style="background:rgba(245,158,11,0.12);color:#fbbf24;">
+                            <i class="bi bi-shield-check"></i>
+                        </div>
+                        <h5>Rules &amp; Guidelines</h5>
+                        <p>Define and share hostel rules with all residents.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ═══ Footer ═══ -->
+    <footer class="site-footer">
+        <div class="container">
+            <p class="mb-0">
+                <span class="footer-brand">HostelPro</span> &copy; 2026 — Hostel Management System
+            </p>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

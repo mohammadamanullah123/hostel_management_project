@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}{{ form_title }} — HostelPro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2>
+            <i class="bi bi-person-{% if student %}gear{% else %}plus-fill{% endif %} me-2" style="color:#a78bfa;"></i>
+            {{ form_title }}
+        </h2>
+        <a href="{% url 'student_list' %}" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Students
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="glass-card">
+                <form method="post" id="student-form">
+                    {% csrf_token %}
+
+                    {% if not student %}
+                    <!-- Username & Password only for new students -->
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="username" class="form-label">Username <span style="color:#f87171;">*</span></label>
+                            <input type="text" class="form-control" id="username" name="username"
+                                   value="{{ form_data.username|default:'' }}"
+                                   placeholder="Choose a username" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="password" class="form-label">Password <span style="color:#f87171;">*</span></label>
+                            <input type="password" class="form-control" id="password" name="password"
+                                   placeholder="Set a password" required minlength="6">
+                        </div>
+                    </div>
+                    {% endif %}
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-6">
+                            <label for="name" class="form-label">Full Name <span style="color:#f87171;">*</span></label>
+                            <input type="text" class="form-control" id="name" name="name"
+                                   value="{% if student %}{{ student.name }}{% elif form_data %}{{ form_data.name }}{% endif %}"
+                                   placeholder="Student full name" required>
+                        </div>
+                        <div class="col-md-6">
+                            <label for="email" class="form-label">Email <span style="color:#f87171;">*</span></label>
+                            <input type="email" class="form-control" id="email" name="email"
+                                   value="{% if student %}{{ student.email }}{% elif form_data %}{{ form_data.email }}{% endif %}"
+                                   placeholder="student@email.com" required>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="roll_no" class="form-label">Roll Number <span style="color:#f87171;">*</span></label>
+                            <input type="text" class="form-control" id="roll_no" name="roll_no"
+                                   value="{% if student %}{{ student.roll_no }}{% elif form_data %}{{ form_data.roll_no }}{% endif %}"
+                                   placeholder="e.g. CS2024001" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="phone" class="form-label">Phone</label>
+                            <input type="text" class="form-control" id="phone" name="phone"
+                                   value="{% if student %}{{ student.phone|default:'' }}{% elif form_data %}{{ form_data.phone }}{% endif %}"
+                                   placeholder="Optional">
+                        </div>
+                        <div class="col-md-4">
+                            <label for="room" class="form-label">Assign Room</label>
+                            <select class="form-select" id="room" name="room">
+                                <option value="">— No Room —</option>
+                                {% for room in rooms %}
+                                <option value="{{ room.room_id }}"
+                                    {% if student and student.room and student.room.room_id == room.room_id %}selected{% endif %}>
+                                    Room {{ room.room_no }} ({{ room.current_occupancy }}/{{ room.capacity }}) — {{ room.get_status_display }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+
+                    <hr style="border-color:var(--border-glass);margin:1.5rem 0;">
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'student_list' %}" class="btn btn-outline-light">Cancel</a>
+                        <button type="submit" class="btn btn-primary" id="student-submit-btn">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {% if student %}Update Student{% else %}Add Student{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}

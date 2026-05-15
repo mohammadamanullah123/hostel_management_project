@@ -1,0 +1,53 @@
+<!-- {% extends 'base.html' %}
+
+{% block content %}
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+    <h1 class="h2">Dashboard</h1>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-primary">
+            <div class="card-body">
+                <h5 class="card-title">Total Students</h5>
+                <h2 class="card-text">{{ total_students }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-success">
+            <div class="card-body">
+                <h5 class="card-title">Total Rooms</h5>
+                <h2 class="card-text">{{ total_rooms }}</h2>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3 mb-4">
+        <div class="card text-white bg-warning">
+            <div class="card-body">
+                <h5 class="card-title">Available Rooms</h5>
+                <h2 class="card-text">{{ available_rooms }}</h2>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if student %}
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5>My Information</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Name:</strong> {{ student.name }}</p>
+                <p><strong>Email:</strong> {{ student.email }}</p>
+                <p><strong>Roll No:</strong> {{ student.roll_no }}</p>
+                <p><strong>Room:</strong> {% if student.room %}{{ student.room.room_no }}{% else %}Not Assigned{% endif %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %} -->
+

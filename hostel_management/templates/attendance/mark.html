@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block title %}Mark Attendance — HostelPro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2>
+            <i class="bi bi-clipboard-check-fill me-2" style="color:#34d399;"></i>
+            Mark Attendance
+        </h2>
+        <a href="{% url 'attendance_list' %}" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Attendance
+        </a>
+    </div>
+
+    <form method="post" id="attendance-form">
+        {% csrf_token %}
+
+        <!-- Date Picker -->
+        <div class="glass-card mb-4" style="padding:1.25rem;">
+            <div class="row align-items-center">
+                <div class="col-md-4">
+                    <label for="date" class="form-label mb-md-0">
+                        <i class="bi bi-calendar3 me-1"></i> Attendance Date
+                    </label>
+                </div>
+                <div class="col-md-4">
+                    <input type="date" class="form-control" id="date" name="date"
+                           value="{{ attendance_date }}" required>
+                </div>
+                <div class="col-md-4 text-md-end mt-2 mt-md-0">
+                    <span class="text-muted" style="font-size:0.85rem;">
+                        <i class="bi bi-people me-1"></i> {{ students|length }} students
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Select All Controls -->
+        <div class="glass-card mb-3" style="padding:0.85rem 1.25rem;">
+            <div class="d-flex justify-content-between align-items-center">
+                <span class="fw-semibold" style="font-size:0.9rem;">
+                    <i class="bi bi-list-check me-1"></i> Student List
+                </span>
+                <div class="d-flex gap-2">
+                    <button type="button" class="btn btn-sm btn-outline-primary" id="selectAll">
+                        <i class="bi bi-check-all me-1"></i> All Present
+                    </button>
+                    <button type="button" class="btn btn-sm btn-outline-danger" id="selectNone">
+                        <i class="bi bi-x-lg me-1"></i> All Absent
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Student Attendance Rows -->
+        <div class="glass-card" style="padding:0.5rem;">
+            {% for student in students %}
+            <div class="attendance-row">
+                <div class="student-info">
+                    <div class="student-avatar">{{ student.name|first|upper }}</div>
+                    <div>
+                        <div class="fw-semibold" style="font-size:0.9rem;">{{ student.name }}</div>
+                        <div class="text-muted" style="font-size:0.75rem;">
+                            {{ student.roll_no }}
+                            {% if student.room %} · Room {{ student.room.room_no }}{% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <label class="attendance-toggle">
+                    <input type="checkbox" name="present" value="{{ student.student_id }}"
+                           class="attendance-checkbox"
+                           {% if student.student_id in existing and existing|dictsort:"key" %}
+                               {% for sid, status in existing.items %}
+                                   {% if sid == student.student_id and status == 'present' %}checked{% endif %}
+                               {% endfor %}
+                           {% endif %}>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            {% empty %}
+            <div class="empty-state">
+                <div class="empty-icon"><i class="bi bi-people"></i></div>
+                <h5>No Students</h5>
+                <p>Add students before marking attendance.</p>
+            </div>
+            {% endfor %}
+        </div>
+
+        {% if students %}
+        <!-- Submit -->
+        <div class="d-flex justify-content-end mt-4 gap-2">
+            <a href="{% url 'attendance_list' %}" class="btn btn-outline-light">Cancel</a>
+            <button type="submit" class="btn btn-success btn-lg" id="submit-attendance-btn">
+                <i class="bi bi-check-circle me-1"></i> Save Attendance
+            </button>
+        </div>
+        {% endif %}
+    </form>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    // Select all / none
+    document.getElementById('selectAll').addEventListener('click', function() {
+        document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = true);
+    });
+    document.getElementById('selectNone').addEventListener('click', function() {
+        document.querySelectorAll('.attendance-checkbox').forEach(cb => cb.checked = false);
+    });
+</script>
+{% endblock %}

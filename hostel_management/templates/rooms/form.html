@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% block title %}{{ form_title }} — HostelPro{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+
+    <!-- Page Header -->
+    <div class="page-header">
+        <h2>
+            <i class="bi bi-{% if room %}pencil-square{% else %}plus-square-fill{% endif %} me-2" style="color:#22d3ee;"></i>
+            {{ form_title }}
+        </h2>
+        <a href="{% url 'room_list' %}" class="btn btn-outline-light btn-sm">
+            <i class="bi bi-arrow-left me-1"></i> Back to Rooms
+        </a>
+    </div>
+
+    <!-- Form Card -->
+    <div class="row justify-content-center">
+        <div class="col-lg-6">
+            <div class="glass-card">
+                <form method="post" id="room-form">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="room_no" class="form-label">Room Number <span style="color:#f87171;">*</span></label>
+                        <input type="text" class="form-control" id="room_no" name="room_no"
+                               value="{% if room %}{{ room.room_no }}{% elif form_data %}{{ form_data.room_no }}{% endif %}"
+                               placeholder="e.g. A-101" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="capacity" class="form-label">Capacity <span style="color:#f87171;">*</span></label>
+                        <input type="number" class="form-control" id="capacity" name="capacity" min="1" max="20"
+                               value="{% if room %}{{ room.capacity }}{% elif form_data %}{{ form_data.capacity }}{% endif %}"
+                               placeholder="Number of beds" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Status</label>
+                        <select class="form-select" id="status" name="status">
+                            <option value="available" {% if room.status == 'available' %}selected{% endif %}>Available</option>
+                            <option value="occupied" {% if room.status == 'occupied' %}selected{% endif %}>Occupied</option>
+                            <option value="maintenance" {% if room.status == 'maintenance' %}selected{% endif %}>Under Maintenance</option>
+                        </select>
+                    </div>
+
+                    <hr style="border-color:var(--border-glass);margin:1.5rem 0;">
+
+                    <div class="d-flex justify-content-end gap-2">
+                        <a href="{% url 'room_list' %}" class="btn btn-outline-light">Cancel</a>
+                        <button type="submit" class="btn btn-primary" id="room-submit-btn">
+                            <i class="bi bi-check-circle me-1"></i>
+                            {% if room %}Update Room{% else %}Add Room{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+{% endblock %}
